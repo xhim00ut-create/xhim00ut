@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XHIMOOUT Drops</title>
+
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+background: #f5f5f5;
+color: #151515;
+font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+a {
+font: inherit;
+}
+
+.page {
+width: min(100%, 430px);
+min-height: 100vh;
+margin: 0 auto;
+background: #fff;
+box-shadow: 0 0 0 1px #ededed;
+}
+
+header {
+position: sticky;
+top: 0;
+z-index: 100;
+height: 64px;
+padding: 0 18px;
+background: #fff;
+border-bottom: 1px solid #efefef;
+display: grid;
+grid-template-columns: 42px 1fr 42px;
+align-items: center;
+}
+
+.menu,
+.cart,
+.back-button {
+width: 34px;
+height: 34px;
+border: 0;
+background: transparent;
+color: #222;
+display: grid;
+place-items: center;
+text-decoration: none;
+cursor: pointer;
+}
+
+.menu span,
+.menu span::before,
+.menu span::after {
+width: 14px;
+height: 2px;
+background: #333;
+display: block;
+content: "";
+border-radius: 5px;
+}
+
+.menu span::before {
+transform: translateY(-5px);
+}
+
+.menu span::after {
+transform: translateY(3px);
+}
+
+.back-button {
+display: none;
+font-size: 27px;
+line-height: 1;
+}
+
+.brand {
+text-align: center;
+font-size: clamp(28px, 9vw, 38px);
+line-height: 1;
+font-weight: 900;
+letter-spacing: -2px;
+cursor: pointer;
+}
+
+.cart {
+justify-self: end;
+position: relative;
+}
+
+.cart svg {
+width: 23px;
+height: 23px;
+stroke-width: 2.2;
+}
+
+.cart-count {
+position: absolute;
+right: 0;
+top: 4px;
+min-width: 15px;
+height: 15px;
+padding: 0 4px;
+border-radius: 999px;
+background: #111;
+color: #fff;
+font-size: 10px;
+line-height: 15px;
+text-align: center;
+font-weight: 700;
+}
+
+.view {
+display: none;
+}
+
+.view.is-active {
+display: block;
+}
+
+.hero {
+padding: 14px 0 18px;
+border-bottom: 1px solid #f0f0f0;
+}
+
+.big-banner {
+width: 100%;
+display: block;
+}
+
+.products {
+padding: 34px 22px 32px;
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+column-gap: 26px;
+row-gap: 34px;
+border-bottom: 1px solid #f0f0f0;
+}
+
+.product {
+background: #fff;
+}
+
+.product:hover img {
+transform: translateY(-3px);
+}
+
+.product img {
+width: 100%;
+aspect-ratio: 1 / 1.06;
+object-fit: contain;
+display: block;
+transition: transform .22s ease;
+}
+
+.info {
+padding-top: 14px;
+}
+
+.info h2 {
+min-height: 40px;
+font-size: 16px;
+line-height: 1.22;
+font-weight: 500;
+margin-bottom: 10px;
+}
+
+.price {
+font-size: 16px;
+line-height: 1;
+color: #222;
+margin-bottom: 12px;
+}
+
+.shop-now {
+border: 0;
+background: transparent;
+color: #111;
+text-decoration: underline;
+text-underline-offset: 3px;
+font-size: 14px;
+font-weight: 500;
+cursor: pointer;
+}
+
+.shop-now:hover {
+opacity: .65;
+}
+
+.bottom-image {
+width: 100%;
+display: block;
+padding: 24px 8px 12px;
+}
+
+.detail-image {
+width: 100%;
+min-height: 410px;
+max-height: 570px;
+object-fit: contain;
+display: block;
+background: #fff;
+}
+
+.detail-panel {
+padding: 28px 23px 34px;
+}
+
+.detail-title {
+font-size: 27px;
+line-height: 1.1;
+font-weight: 900;
+letter-spacing: -1px;
+margin-bottom: 28px;
+}
+
+.detail-price {
+font-size: 26px;
+line-height: 1;
+font-weight: 400;
+margin-bottom: 5px;
+}
+
+.shipping {
+color: #222;
+font-size: 14px;
+text-decoration: underline;
+margin-bottom: 33px;
+}
+
+.field-label {
+color: #777;
+font-size: 16px;
+margin-bottom: 9px;
+}
+
+.size-options {
+display: grid;
+grid-template-columns: repeat(4, minmax(0, 1fr));
+gap: 10px;
+margin-bottom: 34px;
+}
+
+.size-button {
+height: 64px;
+border: 1px solid #e3e3e3;
+border-radius: 10px;
+background: #fff;
+color: #222;
+font-size: 22px;
+font-weight: 500;
+cursor: pointer;
+}
+
+.size-button.is-selected {
+background: #f1f1f1;
+border-color: #dedede;
+box-shadow: inset 0 0 0 1px #ececec;
+}
+
+.primary-button {
+width: 100%;
+min-height: 64px;
+border: 0;
+border-radius: 9px;
+background: #111;
+color: #fff;
+font-size: 20px;
+font-weight: 800;
+cursor: pointer;
+}
+
+.primary-button:active {
+transform: translateY(1px);
+}
+
+.cart-view {
+padding: 25px 22px 36px;
+}
+
+.cart-title {
+font-size: 28px;
+font-weight: 900;
+margin-bottom: 22px;
+}
+
+.empty-cart {
+padding: 40px 0;
+color: #666;
+text-align: center;
+}
+
+.cart-items {
+display: grid;
+gap: 16px;
+margin-bottom: 24px;
+}
+
+.cart-item {
+display: grid;
+grid-template-columns: 82px 1fr auto;
+gap: 13px;
+align-items: center;
+padding-bottom: 16px;
+border-bottom: 1px solid #ececec;
+}
+
+.cart-item img {
+width: 82px;
+height: 82px;
+object-fit: contain;
+background: #fff;
+}
+
+.cart-item h3 {
+font-size: 15px;
+line-height: 1.25;
+margin-bottom: 5px;
+}
+
+.cart-meta {
+color: #666;
+font-size: 14px;
+line-height: 1.45;
+}
+
+.remove-button {
+border: 0;
+background: transparent;
+color: #777;
+font-size: 13px;
+text-decoration: underline;
+cursor: pointer;
+}
+
+.cart-total {
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 19px;
+font-weight: 800;
+margin-bottom: 18px;
+}
+
+.shipping-box {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 16px 18px;
+margin-bottom: 18px;
+background: #f7f7f7;
+border: 1px solid #ececec;
+border-radius: 12px;
+}
+
+.shipping-left {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.shipping-icon {
+width: 40px;
+height: 40px;
+border-radius: 50%;
+overflow: hidden;
+background: #fff;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.shipping-icon img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+.shipping-text h4 {
+margin: 0;
+font-size: 16px;
+font-weight: 700;
+}
+
+.shipping-text p {
+margin: 3px 0 0;
+font-size: 13px;
+color: #777;
+}
+
+.shipping-price {
+font-size: 20px;
+font-weight: 700;
+}
+
+.continue-shopping {
+width: 100%;
+margin-top: 13px;
+border: 1px solid #111;
+background: #fff;
+color: #111;
+min-height: 54px;
+border-radius: 9px;
+font-size: 17px;
+font-weight: 700;
+cursor: pointer;
+}
+
+footer {
+background: #111;
+color: #fff;
+text-align: center;
+padding: 34px 20px 38px;
+}
+
+footer h2 {
+margin-bottom: 22px;
+font-size: 18px;
+letter-spacing: 2px;
+}
+
+.contact-row {
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 10px;
+margin: 16px 0;
+}
+
+.contact-row img {
+width: 26px;
+height: 26px;
+object-fit: contain;
+}
+
+.contact-row a {
+color: #fff;
+font-size: 16px;
+text-decoration: none;
+}
+
+.contact-row a:hover {
+text-decoration: underline;
+}
+
+.toast {
+position: fixed;
+left: 50%;
+bottom: 22px;
+z-index: 200;
+width: min(calc(100% - 34px), 390px);
+padding: 14px 16px;
+border-radius: 9px;
+background: #111;
+color: #fff;
+font-size: 14px;
+text-align: center;
+transform: translate(-50%, 18px);
+opacity: 0;
+pointer-events: none;
+transition: .22s ease;
+}
+
+.toast.is-visible {
+opacity: 1;
+transform: translate(-50%, 0);
+}
+
+body.detail-open .menu,
+body.cart-open .menu {
+display: none;
+}
+
+body.detail-open .back-button,
+body.cart-open .back-button {
+display: grid;
+}
+
+@media (min-width: 700px) {
+.page {
+margin-top: 24px;
+margin-bottom: 24px;
+}
+}
+
+@media (max-width: 360px) {
+header {
+padding: 0 12px;
+}
+
+.products {
+padding-left: 16px;
+padding-right: 16px;
+column-gap: 18px;
+}
+
+.info h2,
+.price {
+font-size: 14px;
+}
+
+.detail-title,
+.detail-price {
+font-size: 24px;
+}
+}
+
+.drops-heading {
+display: flex;
+justify-content: center;
+margin: 25px 0 5px;
+}
+
+.drops-heading img {
+width: 160px;
+height: auto;
+display: block;
+}
+
+</style>
+</head>
+
+<body>
+<main class="page">
+<header>
+<button class="menu" type="button" aria-label="Open menu">
+<span></span>
+</button>
+
+<button class="back-button" type="button" aria-label="Go back">&lsaquo;</button>
+
+<div class="brand" role="button" tabindex="0">XHIMOOUT</div>
+
+<button class="cart" type="button" aria-label="Cart">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+<path d="M6 7h13l-1.3 8.2a2 2 0 0 1-2 1.8H8.3a2 2 0 0 1-2-1.7L5 4H2"/>
+<circle cx="9" cy="20" r="1.4"/>
+<circle cx="17" cy="20" r="1.4"/>
+</svg>
+<span class="cart-count">0</span>
+</button>
+</header>
+<section class="view is-active" id="home-view">
+<section class="hero">
+<img src="banner.jpg" class="big-banner" alt="XHIMOOUT Drops banner">
+
+<div class="drops-heading">
+<img src="drops.JPEG" alt="Drops">
+</div>
+
+</section>
+
+<section class="products" aria-label="Products">
+<div class="product">
+<img src="black.JPG" alt="Black XHO Tee">
+<div class="info">
+<h2>Black XHO Tee</h2>
+<div class="price">R250</div>
+<button class="shop-now" type="button" data-product="black-tee">Shop Now</button>
+</div>
+</div>
+
+<div class="product">
+<img src="white.JPG" alt="White XHO Tee">
+<div class="info">
+<h2>White XHO Tee</h2>
+<div class="price">R250</div>
+<button class="shop-now" type="button" data-product="white-tee">Shop Now</button>
+</div>
+</div>
+
+<div class="product">
+<img src="redl.jpg" alt="Red XHO Leather Jacket">
+<div class="info">
+<h2>Red XHO Leather Jacket</h2>
+<div class="price">R450</div>
+<button class="shop-now" type="button" data-product="red-jacket">Shop Now</button>
+</div>
+</div>
+
+<div class="product">
+<img src="blackl.jpg" alt="Black XHO Leather Jacket">
+<div class="info">
+<h2>Black XHO Leather Jacket</h2>
+<div class="price">R450</div>
+<button class="shop-now" type="button" data-product="black-jacket">Shop Now</button>
+</div>
+</div>
+</section>
+
+<img src="everyone.JPEG" class="bottom-image" alt="XHIMOOUT illustrated lineup">
+
+<footer>
+<h2>CONTACT US</h2>
+
+<div class="contact-row">
+<img src="insta.jpg" alt="Instagram">
+<a href="https://www.instagram.com/xhim00ut/" target="_blank" rel="noopener">- xhim00ut</a>
+</div>
+
+<div class="contact-row">
+<img src="whats.jpg" alt="WhatsApp">
+<a href="https://wa.me/27646481464" target="_blank" rel="noopener">- +27 64 648 1464</a>
+</div>
+</footer>
+</section>
+
+<section class="view" id="detail-view" aria-live="polite">
+<img src="" class="detail-image" id="detail-image" alt="">
+
+<div class="detail-panel">
+<h1 class="detail-title" id="detail-title"></h1>
+<div class="detail-price" id="detail-price"></div>
+<p class="shipping">Shipping calculated at checkout.</p>
+
+<p class="field-label">Size</p>
+<div class="size-options" aria-label="Choose size">
+<button class="size-button" type="button" data-size="S">S</button>
+<button class="size-button" type="button" data-size="M">M</button>
+<button class="size-button" type="button" data-size="L">L</button>
+<button class="size-button" type="button" data-size="XL">XL</button>
+</div>
+
+<button class="primary-button" type="button" id="add-to-cart">Add To Cart</button>
+</div>
+</section>
+
+<section class="view cart-view" id="cart-view" aria-live="polite">
+<h1 class="cart-title">Checkout</h1>
+<div id="cart-content"></div>
+</section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const WHATSAPP_NUMBER = "27646481464";
+const CART_KEY = "xhimoout-cart";
+
+const products = {
+"black-tee": {
+name: "Black XHO Tee",
+price: 250,
+image: "black.JPG"
+},
+"white-tee": {
+name: "White XHO Tee",
+price: 250,
+image: "white.JPG"
+},
+"red-jacket": {
+name: "Red XHO Leather Jacket",
+price: 450,
+image: "redl.jpg"
+},
+"black-jacket": {
+name: "Black XHO Leather Jacket",
+price: 450,
+image: "blackl.jpg"
+}
+};
+
+let currentProductId = "white-tee";
+let selectedSize = "M";
+
+const homeView = document.querySelector("#home-view");
+const detailView = document.querySelector("#detail-view");
+const cartView = document.querySelector("#cart-view");
+const cartCount = document.querySelector(".cart-count");
+const toast = document.querySelector("#toast");
+
+function getCart() {
+try {
+return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+} catch {
+return [];
+}
+}
+
+function saveCart(cart) {
+localStorage.setItem(CART_KEY, JSON.stringify(cart));
+updateCartCount();
+}
+
+function formatPrice(price) {
+return `R${price}`;
+}
+
+function showToast(message) {
+toast.textContent = message;
+toast.classList.add("is-visible");
+window.clearTimeout(showToast.timer);
+showToast.timer = window.setTimeout(() => {
+toast.classList.remove("is-visible");
+}, 1800);
+}
+
+function setView(view) {
+homeView.classList.toggle("is-active", view === "home");
+detailView.classList.toggle("is-active", view === "detail");
+cartView.classList.toggle("is-active", view === "cart");
+document.body.classList.toggle("detail-open", view === "detail");
+document.body.classList.toggle("cart-open", view === "cart");
+if (view === "cart") {
+history.replaceState(null, "", "#cart");
+} else {
+history.replaceState(null, "", location.pathname);
+}
+window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function openProduct(productId) {
+const product = products[productId];
+currentProductId = productId;
+selectedSize = "M";
+
+document.querySelector("#detail-image").src = product.image;
+document.querySelector("#detail-image").alt = product.name;
+document.querySelector("#detail-title").textContent = product.name;
+document.querySelector("#detail-price").textContent = formatPrice(product.price);
+
+document.querySelectorAll(".size-button").forEach((button) => {
+button.classList.toggle("is-selected", button.dataset.size === selectedSize);
+});
+
+setView("detail");
+}
+
+function addToCart() {
+const product = products[currentProductId];
+const cart = getCart();
+const matchingItem = cart.find((item) => {
+return item.id === currentProductId && item.size === selectedSize;
+});
+
+if (matchingItem) {
+matchingItem.quantity += 1;
+} else {
+cart.push({
+id: currentProductId,
+name: product.name,
+price: product.price,
+image: product.image,
+size: selectedSize,
+quantity: 1
+});
+}
+
+saveCart(cart);
+showToast(`${product.name} size ${selectedSize} added to cart`);
+}
+
+function updateCartCount() {
+const count = getCart().reduce((sum, item) => sum + item.quantity, 0);
+cartCount.textContent = count;
+}
+
+function removeItem(index) {
+const cart = getCart();
+cart.splice(index, 1);
+saveCart(cart);
+renderCart();
+}
+
+function buildWhatsAppUrl(cart) {
+const orderLines = cart.map((item) => {
+return `${item.quantity} x ${item.name} - Size ${item.size} - ${formatPrice(item.price)} each`;
+});
+const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+const shipping = 60;
+const total = subtotal + shipping;
+const message = `Hi, i want to order:\n${orderLines.join("\n")}\nTotal: ${formatPrice(total)}`;
+return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+}
+
+function renderCart() {
+const cart = getCart();
+const cartContent = document.querySelector("#cart-content");
+
+if (!cart.length) {
+cartContent.innerHTML = `
+<div class="empty-cart">Your cart is empty.</div>
+<button class="continue-shopping" type="button" data-action="home">Continue Shopping</button>
+`;
+return;
+}
+
+const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+const shipping = 60;
+const total = subtotal + shipping;
+const itemsHtml = cart.map((item, index) => `
+<div class="cart-item">
+<img src="${item.image}" alt="${item.name}">
+<div>
+<h3>${item.name}</h3>
+<div class="cart-meta">Size ${item.size}</div>
+<div class="cart-meta">${item.quantity} x ${formatPrice(item.price)}</div>
+</div>
+<button class="remove-button" type="button" data-remove="${index}">Remove</button>
+</div>
+`).join("");
+
+cartContent.innerHTML = `
+<div class="cart-items">${itemsHtml}</div>
+<div class="shipping-box">
+<div class="shipping-left">
+<div class="shipping-icon">
+<img src="shippingl.JPG" alt="Shipping">
+</div>
+<div class="shipping-text">
+<h4>Shipping</h4>
+<p>Standard Delivery</p>
+</div>
+</div>
+<div class="shipping-price">${formatPrice(shipping)}</div>
+</div>
+
+<div class="cart-total">
+<span>Subtotal</span>
+<span>${formatPrice(subtotal)}</span>
+</div>
+
+<div class="cart-total">
+<span>Total</span>
+<span>${formatPrice(total)}</span>
+</div>
+<button class="primary-button" type="button" data-action="checkout">Checkout</button>
+<button class="continue-shopping" type="button" data-action="home">Continue Shopping</button>
+`;
+}
+
+document.querySelectorAll(".shop-now").forEach((button) => {
+button.addEventListener("click", () => openProduct(button.dataset.product));
+});
+
+document.querySelectorAll(".size-button").forEach((button) => {
+button.addEventListener("click", () => {
+selectedSize = button.dataset.size;
+document.querySelectorAll(".size-button").forEach((sizeButton) => {
+sizeButton.classList.toggle("is-selected", sizeButton === button);
+});
+});
+});
+
+document.querySelector("#add-to-cart").addEventListener("click", addToCart);
+
+document.querySelector(".cart").addEventListener("click", () => {
+renderCart();
+setView("cart");
+});
+
+document.querySelector(".back-button").addEventListener("click", () => {
+if (cartView.classList.contains("is-active")) {
+setView("home");
+} else {
+setView("home");
+}
+});
+
+document.querySelector(".brand").addEventListener("click", () => setView("home"));
+document.querySelector(".brand").addEventListener("keydown", (event) => {
+if (event.key === "Enter" || event.key === " ") {
+event.preventDefault();
+setView("home");
+}
+});
+
+document.querySelector("#cart-content").addEventListener("click", (event) => {
+const removeButton = event.target.closest("[data-remove]");
+const actionButton = event.target.closest("[data-action]");
+
+if (removeButton) {
+removeItem(Number(removeButton.dataset.remove));
+}
+
+if (actionButton?.dataset.action === "home") {
+setView("home");
+}
+
+if (actionButton?.dataset.action === "checkout") {
+const cart = getCart();
+if (!cart.length) {
+showToast("Your cart is empty");
+return;
+}
+window.location.href = buildWhatsAppUrl(cart);
+}
+});
+
+updateCartCount();
+
+if (location.hash === "#cart") {
+renderCart();
+setView("cart");
+}
+</script>
+</body>
+</html>
+
